@@ -1,11 +1,14 @@
+//remote-origin
+//branch-master
 import React, { useEffect } from "react";
 import { useState } from "react";
 import {MenuItem,FormControl,Select,Card,CardContent} from "@material-ui/core";
 import Infobox from "./Infobox";
 import Map from "./Map";
 import Table from "./Table"
-import './App.css';
 import { sortData } from "./util";
+import LineGraph from "./LineGraph";
+import './App.css';
 
 
 
@@ -114,7 +117,7 @@ const onCountryChange=async(event)=>{
           
  
           <h3>Worldwide new cases</h3>
-
+           <LineGraph/>
           {/* {graph} */}
 
        </CardContent>

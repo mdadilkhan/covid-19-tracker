@@ -1,4 +1,4 @@
-export const sortData= (data) => {
+ const sortData= (data) => {
   const sortedData=[...data];
   sortedData.sort((a,b)=>{
       if(a.cases > b.cases){
@@ -9,3 +9,5 @@ export const sortData= (data) => {
   })
   return sortedData;
 }
+
+export {sortData}
