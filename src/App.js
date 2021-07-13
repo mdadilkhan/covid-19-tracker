@@ -9,6 +9,7 @@ import Table from "./Table"
 import { sortData } from "./util";
 import LineGraph from "./LineGraph";
 import './App.css';
+import 'leaflet/dist/leaflet.css';
 
 
 
@@ -19,7 +20,9 @@ function App() {
  const [country, setCountry] = useState("Worldwide")
  const [countryInfo, setcountryInfo] = useState({});
  const [tableData, setTableData]=useState([]);
-
+ const [mapCenter, setMapCenter] = useState([20, 77]);
+ const [mapZoom, setMapZoom] = useState(3);
+ 
 
 // https://disease.sh/v3/covid-19/countries/[COUNTRY_CODE]
 // https://disease.sh/v3/covid-19/all
@@ -37,6 +40,7 @@ useEffect(() => {
  
  
  useEffect(()=>{
+  
    
    const getCountriesData=async()=>{
      await fetch("https://disease.sh/v3/covid-19/countries")
@@ -69,13 +73,12 @@ const onCountryChange=async(event)=>{
   .then(data =>{
     setCountry(countryCode);
     setcountryInfo(data);
+    setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+    console.log("data>>>",data.countryInfo.lat,data.countryInfo.long)
+    setMapZoom(6);
   });
 };
 
-// console.log("countryinfo>>>",countryInfo);
-// console.log("country>>>>",country);
-// console.log("countries>>>",countries);
-// console.log("tabledata",tableData);
 
 
 
@@ -103,8 +106,15 @@ const onCountryChange=async(event)=>{
 
           </div>
 
-      
-         <Map />
+        {/* {console.log("mapcenter",mapCenter)} 
+        {console.log("mapzoom",mapZoom)} */}
+        
+         <Map 
+              center={mapCenter}
+              zoom={mapZoom}
+           
+         />
+          
        </div>
       <Card className="app__right">
        <CardContent>

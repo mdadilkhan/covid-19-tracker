@@ -4,7 +4,7 @@ import numeral from "numeral";
 
 const option={
     legend:{
-        display:false,
+        display: false,
     },
     elements: {
         points: {
@@ -20,6 +20,7 @@ const option={
            return numeral(tooltipItem.value).format("+0,0");
          }
         },
+    },
         scales: {
             xAxes:[
                 {
@@ -43,8 +44,9 @@ const option={
                 },
             ],
         },
-    }
 }
+
+
 
 const buildChartData=(data, casesType="cases") => {
     const chartData=[];
@@ -77,13 +79,13 @@ function LineGraph({casesType="cases"}) {
              return response.json();
          })
          .then(data=>{
-             let chartData=buildChartData(data,"cases");
+             let chartData=buildChartData(data, casesType);
              setdata(chartData)
             //  console.log("data>>>>",data)
-         })
+         });
         };
         fetchData();
-      }, []);
+      }, [casesType]);
 
     return (
         <div>
