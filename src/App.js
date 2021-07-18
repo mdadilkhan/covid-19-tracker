@@ -8,8 +8,9 @@ import Map from "./Map";
 import Table from "./Table"
 import { sortData } from "./util";
 import LineGraph from "./LineGraph";
-import './App.css';
+
 import 'leaflet/dist/leaflet.css';
+import './App.css';
 
 
 
@@ -20,8 +21,9 @@ function App() {
  const [country, setCountry] = useState("Worldwide")
  const [countryInfo, setcountryInfo] = useState({});
  const [tableData, setTableData]=useState([]);
- const [mapCenter, setMapCenter] = useState([20, 77]);
+ const [mapCenter, setMapCenter] = useState([ 33, 65]);
  const [mapZoom, setMapZoom] = useState(3);
+ const [mapCountries, setMapCounries] = useState([])
  
 
 // https://disease.sh/v3/covid-19/countries/[COUNTRY_CODE]
@@ -37,11 +39,9 @@ useEffect(() => {
 }, [])
  
    
- 
+
  
  useEffect(()=>{
-  
-   
    const getCountriesData=async()=>{
      await fetch("https://disease.sh/v3/covid-19/countries")
      .then((response)=>response.json())
@@ -52,7 +52,9 @@ useEffect(() => {
         })); 
 
         const sortedData=sortData(data);
-        setTableData(sortedData);   
+        setTableData(sortedData); 
+         setMapCounries(data);
+         console.log("<<<<<",data);
         setCountries(countries);    
       });
    };
@@ -64,7 +66,7 @@ useEffect(() => {
 
 const onCountryChange=async(event)=>{
   const countryCode=event.target.value;
-  setCountry(countryCode);
+  
   const url = countryCode === "Worldwide" 
   ? "https://disease.sh/v3/covid-19/all" 
   : `https://disease.sh/v3/covid-19/countries/${countryCode}`
@@ -74,19 +76,19 @@ const onCountryChange=async(event)=>{
     setCountry(countryCode);
     setcountryInfo(data);
     setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
-    console.log("data>>>",data.countryInfo.lat,data.countryInfo.long)
-    setMapZoom(6);
+   
+    setMapZoom(5);
   });
 };
 
-
+console.log("map",mapCountries);
 
 
   return (
     <div className="app">
       <div className="app__left">
          <div className="app__header">
-            <h1>COVID-19 TRACKER</h1>
+            <h1 className="heading">COVID-19 TRACKER</h1>
 
             <FormControl className="app_dropdown">
               <Select variant="outlined" value={country} onChange={onCountryChange}>
@@ -100,20 +102,21 @@ const onCountryChange=async(event)=>{
          </div> 
    
           <div className="app__status">
-            <Infobox title="corornavirus cases" cases={countryInfo.todayCases} total={countryInfo.cases} />
-            <Infobox title="Recovered" cases={countryInfo.todayRecovered} total={countryInfo.recovered} />
-            <Infobox title="death" cases={countryInfo.todayDeaths} total={countryInfo.deaths}/>
+            <Infobox  className="status" title="corornavirus cases" cases={countryInfo.todayCases} total={countryInfo.cases} />
+            <Infobox  className="status" title="Recovered" cases={countryInfo.todayRecovered} total={countryInfo.recovered} />
+            <Infobox className="status" title="death" cases={countryInfo.todayDeaths} total={countryInfo.deaths}/>
 
           </div>
 
-        {/* {console.log("mapcenter",mapCenter)} 
-        {console.log("mapzoom",mapZoom)} */}
+     
         
          <Map 
+              // casesType={casesType}
+              countries={mapCountries}
               center={mapCenter}
               zoom={mapZoom}
            
-         />
+          />
           
        </div>
       <Card className="app__right">
